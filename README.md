@@ -41,11 +41,25 @@ sudo liteproxy restart
 
 端口规则恢复遇到其他管理任务时最多等待 600 秒，获得锁后再执行；等待超时或规则执行失败会明确报错，安装器自动显示最近的服务日志。
 
+自动续期同样最多等锁 600 秒，定时统计最多等待 30 秒；失败会记录到对应 systemd 服务日志。统计每五分钟落盘，采样失败或采样期间进程重启时保留上次数据。突然断电、进程崩溃仍可能损失最后一个采样周期的流量，统计不用于精确计费。
+
+为限制异常内存增长，Xray 的 MemoryMax 为 192 MiB，每个 Hy2 实例为 128 MiB；超过上限可能由内核终止并由 systemd 重启，连接会中断。需要内核启用 memory cgroup；多个 Hy2 实例各有独立限额，512 MB 机器建议保留默认一个实例。这些上限不保证整机不会 OOM，也不代表可承载连接数。续期只重启当时运行的 Hy2，手动停止的实例保持停止。
+
+日常检查：
+
+~~~sh
+sudo liteproxy status
+sudo liteproxy test
+sudo systemctl list-timers --all 'liteproxy-*'
+sudo journalctl -u liteproxy-renew.service -n 30 --no-pager
+~~~
+
 ## 当前限制
 
 - 为兼容传统 mKCP seed/header，固定 Xray 25.8.3；旧版本不含后续修复，不能直接替换为最新版而保留旧 mKCP 配置。
 - REALITY 选择当次探测中支持 TLS 1.3、HTTP/2 且证书有效的低延迟目标，不保证目标始终适用。
 - mKCP seed 使用预共享密钥封装，区别于 TLS 证书认证。BT 过滤无法保证识别加密 BT。
-- 已进行本地配置和数据传输验证；Linux 安装、真实 IP 证书跨期续期及 512 MB 压力测试尚未在真实 VPS 完成。
+- 已进行本地配置和数据传输验证，用户已反馈 VPS 安装运行正常；真实 IP 证书跨期续期及 512 MB 压力测试尚未完成。
+- 自动重启处理进程退出，不检测进程卡住或公网不可达，也没有外部故障通知；需要保持 IP 稳定、TCP 80 开放并检查续期日志。
 
 维护时每次修改都会重新构建并验证安装脚本，再同步本仓库的 install.sh 和 README.md。
