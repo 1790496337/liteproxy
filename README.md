@@ -16,6 +16,12 @@ curl -fL https://raw.githubusercontent.com/1790496337/liteproxy/main/install.sh 
 
 安装文件只包含轻量管理程序。运行后从官方仓库下载并校验 Xray、Hysteria 2、acme.sh；没有内嵌代理二进制。
 
+每次安装、重装及 start/restart 先检查系统、CPU、内存、磁盘和所需端口（含 TCP 80、本机 API）。至少需 384 MiB 系统可见内存、512 MiB 可用磁盘、64 MiB 部署可用内存。
+
+占用所需端口的旧代理，只有服务名和程序路径都能确认是 x-ui/3x-ui、Xray、V2Ray、Hysteria 时才会自动停用、备份并卸载程序。备份位于 `/var/backups/liteproxy/legacy-*`，含原路径和服务状态；原配置、证书、客户端资料保留。清理失败会尝试恢复原服务；后续新部署失败时备份保留。包管理器单元、额外启动触发器、符号链接及未知业务服务需手动处理。
+
+重装保留 LiteProxy 已有节点、密钥、证书和统计；查看状态、流量、链接不会触发卸载。
+
 ## 管理
 
 ~~~sh
@@ -37,3 +43,5 @@ sudo liteproxy restart
 - REALITY 选择当次探测中支持 TLS 1.3、HTTP/2 且证书有效的低延迟目标，不保证目标始终适用。
 - mKCP seed 使用预共享密钥封装，区别于 TLS 证书认证。BT 过滤无法保证识别加密 BT。
 - 已进行本地配置和数据传输验证；Linux 安装、真实 IP 证书跨期续期及 512 MB 压力测试尚未在真实 VPS 完成。
+
+维护时每次修改都会重新构建并验证安装脚本，再同步本仓库的 install.sh 和 README.md。
