@@ -24,6 +24,8 @@ curl -fL https://raw.githubusercontent.com/1790496337/liteproxy/main/install.sh 
 
 ## 管理
 
+导出的链接别名为 `Q_VLESS+mKCP`、`Q_VLESS+REALITY`、`Q_Hysteria2`。
+
 ~~~sh
 sudo liteproxy
 sudo liteproxy info
