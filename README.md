@@ -37,8 +37,7 @@ sudo v2 info
 sudo v2 url
 sudo v2 url mkcp
 sudo v2 qr
-sudo v2 qr hy2
-sudo v2 qr mkcp --output /root/mkcp.png
+sudo v2 qr --output /root/node.png
 sudo v2 status
 sudo v2 restart
 sudo v2 stop
@@ -48,7 +47,7 @@ sudo v2 log hy2
 sudo v2 test
 ~~~
 
-`url` 输出完整纯链接，每个协议一行，别名为 `IP_协议名称`；`url --base64` 可输出 Base64 链接列表。`qr` 默认显示 REALITY 二维码，可指定 `reality`、`hy2` 或 `mkcp`。
+`url` 输出完整纯链接，每个协议一行，别名为 `IP_协议名称`；`url --base64` 可输出 Base64 链接列表。`qr` 一次显示三个协议的二维码，各自标明 IP 和协议，二维码之间空行分隔，无需选择协议。`qr --output /root/node.png` 分别保存为 `node-mkcp.png`、`node-reality.png`、`node-hy2.png`。
 
 手机使用 v2rayNG／Shadowrocket 扫一扫。二维码由 `qrencode` 在 VPS 本地生成，不上传在线网站。终端使用等宽字体、避免折行；显示不全可保存 PNG 后通过 SFTP 下载，图片权限为 600，含连接凭据。剪贴板导入请只复制完整单行链接；之前的手机剪贴板问题尚未实机定位，可使用扫码。
 
