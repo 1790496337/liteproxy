@@ -24,13 +24,15 @@ curl -fL https://raw.githubusercontent.com/1790496337/liteproxy/main/install.sh 
 
 ## 管理
 
-导出的链接别名为 `Q_VLESS+mKCP`、`Q_VLESS+REALITY`、`Q_Hysteria2`。
+导出的链接别名为 `服务器IP_VLESS+mKCP`、`服务器IP_VLESS+REALITY`、`服务器IP_Hysteria2`。
 
 ~~~sh
 sudo liteproxy
 sudo liteproxy info
 sudo liteproxy client add reality alice
 sudo liteproxy url
+sudo liteproxy url mkcp default
+sudo liteproxy url --base64
 sudo liteproxy stats
 sudo liteproxy reality scan --apply
 sudo liteproxy cert status
@@ -38,6 +40,10 @@ sudo liteproxy restart
 ~~~
 
 菜单提供入站、客户端、流量统计、凭据修改、REALITY 测速、证书管理和 BBR 调优。IP 证书自动续期需要保持 TCP 80 可从公网访问。手动 stop 会保持停止，直到 start 或下次开机。
+
+`url` 仅输出纯链接，每个节点一行，方便从剪贴板导入。v2rayNG 使用右上角“+ → 从剪贴板导入”；Shadowrocket 使用首页的剪贴板导入提示。请勿使用“添加订阅地址”导入单节点链接，也不要复制终端说明、Markdown 包装、`mailto:` 或 `vless\://` 中的反斜杠。聊天工具改写链接时，可用 `url --base64` 导出整段 Base64；v2rayNG 1.10.23 的批量导入代码支持该形式，其他客户端需确认支持后使用。
+
+已核对 v2rayNG 1.10.23 官方解析代码中的 VLESS KCP/seed、REALITY 和 Hy2 参数；尚未在 Android/iOS 实机验证。客户端能导入不代表其内核支持服务端的传统 mKCP seed/header，需要单独验证连接。
 
 端口规则恢复遇到其他管理任务时最多等待 600 秒，获得锁后再执行；等待超时或规则执行失败会明确报错，安装器自动显示最近的服务日志。
 
