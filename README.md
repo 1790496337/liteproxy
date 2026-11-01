@@ -33,6 +33,10 @@ sudo liteproxy client add reality alice
 sudo liteproxy url
 sudo liteproxy url mkcp default
 sudo liteproxy url --base64
+sudo liteproxy qr
+sudo liteproxy qr mkcp
+sudo liteproxy qr hy2 default
+sudo liteproxy qr reality default --output /root/reality.png
 sudo liteproxy stats
 sudo liteproxy reality scan --apply
 sudo liteproxy cert status
@@ -40,6 +44,10 @@ sudo liteproxy restart
 ~~~
 
 菜单提供入站、客户端、流量统计、凭据修改、REALITY 测速、证书管理和 BBR 调优。IP 证书自动续期需要保持 TCP 80 可从公网访问。手动 stop 会保持停止，直到 start 或下次开机。
+
+分享提供两种方式：菜单 **6 分享链接**、**13 二维码分享**。`url` 可一次导出所有链接，`qr [入站名称] [客户端名称]` 每次显示一个客户端的二维码，默认 `reality default`。可用入站名称为 `mkcp`、`reality`、`hy2`（自建入站使用其实际名称），客户端默认 `default`。手机使用 v2rayNG 或 Shadowrocket 的扫一扫导入。
+
+二维码由系统软件源提供的 `qrencode` 在 VPS 本地生成，无后台进程，不调用在线二维码网站；二维码内容与对应分享链接相同。终端请保持等宽字体、不自动折行，显示不完整可缩小字体或使用 `--output /root/node.png` 保存 PNG，再通过 SFTP 下载查看。图片以 600 权限保存，内含节点凭据，按需分享。老版本直接执行 `liteproxy install` 不会安装系统依赖，需重跑一键脚本或安装 `sudo apt-get install -y qrencode`。
 
 `url` 仅输出纯链接，每个节点一行，方便从剪贴板导入。v2rayNG 使用右上角“+ → 从剪贴板导入”；Shadowrocket 使用首页的剪贴板导入提示。请勿使用“添加订阅地址”导入单节点链接，也不要复制终端说明、Markdown 包装、`mailto:` 或 `vless\://` 中的反斜杠。聊天工具改写链接时，可用 `url --base64` 导出整段 Base64；v2rayNG 1.10.23 的批量导入代码支持该形式，其他客户端需确认支持后使用。
 
