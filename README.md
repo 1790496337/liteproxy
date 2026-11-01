@@ -1,4 +1,4 @@
-# LiteProxy
+# v2
 
 适合小内存 VPS 的固定三协议代理脚本，无 Web 面板：
 
@@ -17,33 +17,35 @@
 在 VPS SSH 终端执行（root 可省略 sudo）：
 
 ~~~sh
-curl -fL https://raw.githubusercontent.com/1790496337/liteproxy/main/install.sh -o /tmp/liteproxy-install.sh && sudo sh /tmp/liteproxy-install.sh
+curl -fL https://raw.githubusercontent.com/1790496337/v2/main/install.sh -o /tmp/v2-install.sh && sudo sh /tmp/v2-install.sh
 ~~~
 
 **每次部署都生成全新随机 UUID、密码、mKCP seed、REALITY 密钥与 short ID，旧链接失效，需重新导入。** 不迁移或备份旧节点凭据。仍有效且匹配当前 IP 的证书继续使用，避免重复申请。
 
-安装器只打包 Python 标准库管理程序，从官方仓库下载并校验 Xray、Hysteria 2 和 acme.sh；不捆绑代理二进制或地理数据库。安装前检查系统资源、端口。只自动处理服务名和程序路径都能确认的冲突旧代理（x-ui/3x-ui、Xray、V2Ray、Hysteria）；第三方程序备份在 `/var/backups/liteproxy/legacy-*`，未知冲突会停止部署并提示。
+安装器只打包 Python 标准库管理程序，从官方仓库下载并校验 Xray、Hysteria 2 和 acme.sh；不捆绑代理二进制或地理数据库。安装前检查系统资源、端口。只自动处理服务名和程序路径都能确认的冲突旧代理（x-ui/3x-ui、Xray、V2Ray、Hysteria）；第三方程序备份在 `/var/backups/v2/legacy-*`，未知冲突会停止部署并提示。
 
-覆盖安装自动停用并删除旧版统计、端口跳跃服务，删除旧统计／事务文件和 LiteProxy 专用 nftables 表，停用旧 Hy2 实例，再部署固定三协议。不保留旧节点凭据和统计，不改动其他业务服务或防火墙表；保留证书及 ACME 账户以便续期。
+覆盖安装自动停用并删除旧版统计、端口跳跃服务，删除旧统计／事务文件和 v2 专用 nftables 表，停用旧 Hy2 实例，再部署固定三协议。不保留旧节点凭据和统计，不改动其他业务服务或防火墙表；保留证书及 ACME 账户以便续期。
+
+项目已从 LiteProxy 更名为 `v2`：命令为 `v2`，配置目录 `/etc/v2`，程序目录 `/usr/local/lib/v2`，服务前缀 `v2-`。覆盖旧 LiteProxy 时，会停用并删除旧服务，迁移证书和 ACME 账户、更新续期路径；新版启动成功后删除旧命令与安装目录。
 
 ## 使用与分享
 
-运行 `sudo liteproxy` 打开中文菜单，或直接执行：
+运行 `sudo v2` 打开中文菜单，或直接执行：
 
 ~~~sh
-sudo liteproxy info
-sudo liteproxy url
-sudo liteproxy url mkcp
-sudo liteproxy qr
-sudo liteproxy qr hy2
-sudo liteproxy qr mkcp --output /root/mkcp.png
-sudo liteproxy status
-sudo liteproxy restart
-sudo liteproxy stop
-sudo liteproxy start
-sudo liteproxy cert status
-sudo liteproxy log hy2
-sudo liteproxy test
+sudo v2 info
+sudo v2 url
+sudo v2 url mkcp
+sudo v2 qr
+sudo v2 qr hy2
+sudo v2 qr mkcp --output /root/mkcp.png
+sudo v2 status
+sudo v2 restart
+sudo v2 stop
+sudo v2 start
+sudo v2 cert status
+sudo v2 log hy2
+sudo v2 test
 ~~~
 
 `url` 输出完整纯链接，每个协议一行，别名为 `IP_协议名称`；`url --base64` 可输出 Base64 链接列表。`qr` 默认显示 REALITY 二维码，可指定 `reality`、`hy2` 或 `mkcp`。
@@ -59,8 +61,8 @@ sudo liteproxy test
 - 保留 BT／私网过滤，Hy2 经本机认证 SOCKS 接口应用 Xray 过滤；不能保证识别所有加密 BT。
 
 ~~~sh
-sudo systemctl list-timers --all 'liteproxy-*'
-sudo journalctl -u liteproxy-renew.service -n 30 --no-pager
+sudo systemctl list-timers --all 'v2-*'
+sudo journalctl -u v2-renew.service -n 30 --no-pager
 ~~~
 
 为兼容传统 mKCP seed/header，Xray 固定 25.8.3，未包含后续修复；不能直接替换最新版而沿用旧配置。REALITY 在部署时选择通过 TLS 1.3、HTTP/2 和证书校验的低延迟候选目标。IP 证书跨期续期和 512 MB 压力测试尚未完成。
